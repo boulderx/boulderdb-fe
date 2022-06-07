@@ -42,7 +42,8 @@ export default function VideoOverview({token}){
     const navigate = useNavigate();
 
     const loadVideos = async () => {
-        const response = await fetch('http://localhost:8090/videos', {
+        const url = new URL('videoList', process.env.REACT_APP_APP_URL);
+        const response = await fetch(url, {
             method: 'GET',
             headers: {
                 'Authorization': 'Bearer ' + token,
@@ -51,8 +52,7 @@ export default function VideoOverview({token}){
         });
         const data = await response.json();
         if(response?.status === 200) {
-            console.log(data);
-            setVideos(data?.areas);
+            setVideos(data?.videos);
         }
     }
 
@@ -86,14 +86,14 @@ export default function VideoOverview({token}){
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {videos ? (videos.map((area) => (
-                                <StyledTableRow key={area._id}>
+                            {videos ? (videos.map((video) => (
+                                <StyledTableRow key={video._id}>
                                     <StyledTableCell>
-                                        {area.name}
+                                        {video.name}
                                     </StyledTableCell>
-                                    <StyledTableCell>{area.desc}</StyledTableCell>
+                                    <StyledTableCell>{video.desc}</StyledTableCell>
                                     <StyledTableCell align="right">
-                                        <IconButton onClick={() => changeNavHandler(`/videos/${area._id}`)}>
+                                        <IconButton onClick={() => changeNavHandler(`/videos/${video._id}`)}>
                                             <EditIcon />
                                         </IconButton>
                                         {/*<IconButton>
